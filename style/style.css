@@ -1,0 +1,221 @@
+a {
+   color: rgb(91, 74, 66);
+}
+a:hover {
+   color: rgb(91, 74, 66);
+}
+header {
+   position: fixed;
+   top: 0;
+   width: 100%;
+   background-color: rgb(255, 244, 214);
+   z-index: 100;
+}
+.navbar-brand {
+   margin-left: 18%;
+}
+.navbar-nav {
+   padding-left: 50%;
+}
+.dropdown-item:hover {
+   background: rgb(255, 244, 214);
+}
+.nav-item {
+   margin-left: 50px;
+}
+.basket svg, .basket p{
+   display: inline;
+   height: 24px;
+   width: 24px;
+}
+.badge {
+   background-color: rgb(91, 74, 66);
+}
+.form-control:focus{
+   box-shadow: 0 0 0;
+   border-color: rgb(91, 74, 66);
+}
+.btn-search,.btn-search:focus {
+   color: rgb(91, 74, 66);
+   border-color: rgb(91, 74, 66);
+   box-shadow: 0 0 0;
+}
+.btn-search:hover, .btn-search:active {
+   background-color: rgb(91, 74, 66);
+   border-color: rgb(91, 74, 66);
+   color: #ffffff;
+}
+.paige-container {
+   max-width: 1000px;
+   margin: 0 auto;
+}
+#carouselExampleCaptions {
+   height: 400px;
+   margin: 0 auto;
+   margin-top: 100px;
+   background-color: bisque;
+   border-radius: 10px;
+}
+.carousel-inner {
+   border-radius: 10px;
+}
+.catalog .navbar{
+   border-top: 1px solid rgb(91, 74, 66);
+}
+.catalog .list-group-item:hover {
+   background: rgb(255, 244, 214);
+   cursor: pointer;
+}
+.catalog {
+   margin-top: 150px;
+   margin-bottom: 60px;
+}
+.navbar-toggler:focus {
+   box-shadow: 0 0 0;
+}
+.navbar-toggler:hover {
+   background: rgb(255, 244, 214);
+}
+.dropdown-toggle {
+   background: #ffffff;
+   color: rgb(0, 0, 0,0.9);
+   border: 0;
+}
+.dropdown-toggle:hover {
+   background-color: rgb(255, 244, 214);
+   color: rgba(0, 0, 0, 0.9);
+}
+.dropdown-toggle:focus {
+   background-color: rgb(255, 244, 214);
+   box-shadow: 0 0 0 white;
+   color: rgba(0, 0, 0, 0.9);
+   border: 0;
+}
+.nav-dropdown {
+   background-color: rgb(255, 244, 214);
+}
+.card {
+   position: relative;
+   height: 350px;
+   border-radius: 10px;
+   margin-bottom: 10px;
+}
+.card:hover {
+   box-shadow: 1px 1px 5px black;
+   z-index: 20;
+}
+.get-product {
+   background-color: rgb(91, 74, 66, 0.7);
+   color: #ffffff;
+   border-radius: 10px;
+   border: 0;
+   width: 200px;
+   height: 34px;
+   left: 60px;
+   position: absolute;
+   bottom: 10px;
+}
+#buy-product {
+   background-color: rgb(91, 74, 66, 0.7);
+   color: #ffffff;
+   border-radius: 10px;
+   border: 0;
+   width: 100px;
+   right: 20px;
+   position: absolute;
+   bottom: 15px;
+}
+#delete-product {
+   background-color: rgba(255, 0, 0, 0.605);
+   color: #ffffff;
+   border-radius: 10px;
+   border: 0;
+   width: 100px;
+   right: 130px;
+   position: absolute;
+   bottom: 15px;
+}
+.dropdown-item {
+   cursor: pointer;
+}
+.card-img {
+   position: relative;
+   height: 170px;
+}
+.description {
+   text-align: center;
+}
+.card-title {
+   text-align: center;
+}
+.basket-paragraph {
+   padding-left: 20px;
+   padding-bottom: 10px;
+   border-bottom: 2px solid rgb(0,0,0,0.6);
+   margin-bottom: 10px;
+   margin-top: -100px;
+}
+.basket-card {
+   box-shadow: 3px 3px 10px rgb(0,0,0,0.5);
+   height: 350px;
+   border-radius: 10px;
+}
+.get-product:hover {
+   background-color: rgb(91, 74, 66);
+}
+.basket-products {
+   margin-top: 200px;
+}
+.basket-products div {
+   margin-bottom: 20px;
+}
+.basket-products .card {
+   height: 300px;
+}
+.basket-products .product-price {
+   bottom: 0px;
+}
+.basket-card {
+   margin: 0 auto;
+}
+.basket-card-img {
+   height: 200px;
+   margin-left: 90px;
+}
+.product-price {
+   position: absolute;
+   bottom: 50px;
+}
+.pagination {
+   max-width: 200px;
+   margin: 0 auto;
+}
+.page-link {
+   cursor: pointer;
+}
+.more-products {
+   height: 100px;
+   border-radius: 10px;
+   font-size: 20px;
+   text-align: center;
+   padding-top: 34px;
+}
+.more-products:hover {
+   background-color: #e4e4e4;
+   cursor: pointer;
+}
+footer {
+   width: 100%;
+   height: 300px;
+   background-color: rgb(243, 243, 243);
+   margin-top: 50px;
+}
+@media screen and (max-width: 1285px) {
+   .navbar-brand {
+      margin-left: 10%;
+   }
+}
+
+.hide {
+   display: none;
+}
