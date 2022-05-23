@@ -9,7 +9,9 @@ let productsList;
 let categoriesList;
 let ShowedElmsCount;
 let productsToBasket = [];
-const sendRequest = async () => {
+// получение данных
+await sendRequest();
+async function sendRequest(){
    const getData = async (URL) => {
       let response = await fetch(URL);
       let data = await response.json();
@@ -18,6 +20,14 @@ const sendRequest = async () => {
    productsList = await getData(products_URL);
    categoriesList = await getData(categories_URL);
 }
+function setToLocalStorage(name, data) {
+   localStorage.setItem(''+name,JSON.stringify(data))
+}
+function getFromLocalStorage(name) {
+   if (localStorage.getItem(''+name))
+      return JSON.parse(localStorage.getItem(''+name));
+   return false;
+}
 function getCookie(name) {
    let matches = document.cookie.match(new RegExp(
      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
@@ -25,7 +35,7 @@ function getCookie(name) {
    return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
-const renderProducts = async () => {
+const renderNineProducts = async () => {
    let x;
    if (!ShowedElmsCount) x = 0;
    else x = ShowedElmsCount;
@@ -42,31 +52,13 @@ const renderProducts = async () => {
       </div>`
    }
 }
-const createMoreProductsElement = () => {
-   let btnPlace = document.querySelector('.more-products-container');
-   btnPlace.innerHTML = `
-   <div class="more-products">
-      <p>Показать еще</p>
-   </div>
-   `
-   btnPlace.onclick = function() {
-      renderProducts();
-      if (ShowedElmsCount+9 > productsList.length) ShowedElmsCount = productsList.length;
-      else ShowedElmsCount +=9;
-      document.cookie = "ShowedElmsCount="+ShowedElmsCount;
-      if (ShowedElmsCount == productsList.length) btnPlace.innerHTML = '';
-   }
-}
-//при загрузке страницы
-async function showProduts() {
-   await renderProducts();
-   setTimeout(() => {
-      if (!getCookie('ShowedElmsCount')) {
+const renderProductsOnload = async () => {
+   if (!getFromLocalStorage('ShowedElmsCount')) {
       ShowedElmsCount = 9;
-      document.cookie = "ShowedElmsCount="+ShowedElmsCount;
+      setToLocalStorage('ShowedElmsCount',ShowedElmsCount);
    }
    else {
-      ShowedElmsCount = Number(getCookie('ShowedElmsCount'));
+      ShowedElmsCount = Number(getFromLocalStorage('ShowedElmsCount'));
       for (let i=9;i<ShowedElmsCount;i++) {
          productsPlace.innerHTML +=
          `<div class="card col-4">
@@ -81,113 +73,106 @@ async function showProduts() {
       }
    };
    if (ShowedElmsCount < productsList.length) createMoreProductsElement();
+}
+const createMoreProductsElement = () => {
+   let btnPlace = document.querySelector('.more-products-container');
+   btnPlace.innerHTML = `
+   <div class="more-products">
+      <p>Показать еще</p>
+   </div>`;
+   btnPlace.addEventListener('click', function() {
+      renderNineProducts();
+      if (ShowedElmsCount+9 > productsList.length) ShowedElmsCount = productsList.length;
+      else ShowedElmsCount +=9;
+      setToLocalStorage('ShowedElmsCount',ShowedElmsCount);
+      if (ShowedElmsCount == productsList.length) btnPlace.innerHTML = '';
    })
 }
-function changeProductListByCategory(id) {
-   for (let i=0;i<productsList.length;i++) {
-      if (productsList[i].category != id) {
-         productsList.splice(i,1);
-         i--;
-      }
-   }
-   console.log(productsList);
+//при загрузке страницы
+const showProdutsOnloadPage = async () => {
+   await renderNineProducts(); //при первой загрузке страницы рендерит первые 9 элементов
+   await renderProductsOnload(); //при первой загрузке рендерит оставшиеся элементы
 }
-// category.changeProductsByCategory = function() {
-//    for (let i=0;i<productsList.length;i++) {
-//       if (productsList[i].category != category.id) {
-//          console.log(category.id);
-//          productsList.splice(i,1);
-//          i--;
-//       }
-//    }
-//    console.log(productsList);
-// }
-function renderCatalog() {
+const renderCatalog = () => {
    const listGroup = document.querySelector('.catalog-list-group'); 
    for (let category of categoriesList) {
       listGroup.innerHTML += 
       `<li class="list-group-item">${category.title}</li>`
    }
 }
-// получение данных
-await sendRequest();
-
 //функционал девевле/дороже
-const min = document.querySelector('.min');
-const max = document.querySelector('.max');
-min.onclick = () => {
-   productsList.sort(function (a, b) {
-      if (a.price > b.price) {
-         return 1;
-      }
-      if (a.price < b.price) {
-         return -1;
-      }
-      return 0;
-      });
-   productsPlace.innerHTML = '';
-   ShowedElmsCount = 0;
-   renderProducts();
-   createMoreProductsElement();
-   ShowedElmsCount = 9;
-   document.cookie = 'ShowedElmsCount='+ShowedElmsCount;
-};
-max.onclick = () => {
-   productsList.sort(function (a, b) {
-      if (a.price < b.price) {
-         return 1;
-      }
-      if (a.price > b.price) {
-         return -1;
-      }
-      return 0;
-      });
-   productsPlace.innerHTML = '';
-   ShowedElmsCount = 0;
-   renderProducts();
-   createMoreProductsElement();
-   ShowedElmsCount = 9;
-   document.cookie = 'ShowedElmsCount='+ShowedElmsCount;
-};
-//загрузка продуктов в каталог
-showProduts()
-   .then(renderCatalog())
-   // Функционал кнопки добавит в корзину
-   .then(() => {
-      if (!ShowedElmsCount) ShowedElmsCount = getCookie('ShowedElmsCount');
-      for (let i=0;i<ShowedElmsCount;i++) {
-         let id = 'addToBasket-'+productsList[i].id;
-         let curItem = document.getElementById(id);
-         console.log(curItem);
-      }
-   })
-   //функционал поиска
-   .then(() => {
-   let btnSearch = document.querySelector('.btn-search');
-   btnSearch.onclick = function() {
-               const value = document.getElementById('liveSearch').value.trim()
-               const elasticItems = document.querySelectorAll('.card');
-               const searchRegExp = new RegExp(value, 'gi');
-               const moreBtn = document.querySelector('.more-products-container');
-               if (value === '') {
-                  elasticItems.forEach((el) => {
-                     el.classList.remove('hide')
-                  })
-                  moreBtn.classList.remove('hide');
-                  return
-               }
-               else {
-                  elasticItems.forEach((el) => {
-                     const innerCard = el.querySelector('.card-title')
-                     const elementText = innerCard.textContent;
-                     const isContainsSearchRequest = searchRegExp.test(elementText)
-                     if (!isContainsSearchRequest) {
-                        el.classList.add('hide')
-                     } else {
-                        el.classList.remove('hide');
-                     }
-                     moreBtn.classList.add('hide');
-                  })
-               }
+const addMinMaxPriceSort = () => {
+   const min = document.querySelector('.min');
+   const max = document.querySelector('.max');
+   min.addEventListener('click', () => {
+      productsList.sort(function (a, b) {
+         if (a.price > b.price) {
+            return 1;
          }
+         if (a.price < b.price) {
+            return -1;
+         }
+         return 0;
+         });
+      productsPlace.innerHTML = '';
+      ShowedElmsCount = 0;
+      renderNineProducts();
+      createMoreProductsElement();
+      ShowedElmsCount = 9;
+      setToLocalStorage('ShowedElmsCount',ShowedElmsCount);
+   });
+   max.addEventListener('click', () => {
+      productsList.sort(function (a, b) {
+         if (a.price < b.price) {
+            return 1;
+         }
+         if (a.price > b.price) {
+            return -1;
+         }
+         return 0;
+         });
+      productsPlace.innerHTML = '';
+      ShowedElmsCount = 0;
+      renderNineProducts();
+      createMoreProductsElement();
+      ShowedElmsCount = 9;
+      setToLocalStorage('ShowedElmsCount',ShowedElmsCount);
+   });
+}
+const addSearchProducts = () => {
+   let btnSearch = document.querySelector('.btn-search');
+   btnSearch.addEventListener('click', function() {
+      const value = document.getElementById('liveSearch').value.trim()
+      const elasticItems = document.querySelectorAll('.card');
+      const searchRegExp = new RegExp(value, 'gi');
+      const moreBtn = document.querySelector('.more-products-container');
+      if (value === '') {
+         elasticItems.forEach((el) => {
+            el.classList.remove('hide')
+         })
+         moreBtn.classList.remove('hide');
+         return
+      }
+      else {
+         elasticItems.forEach((el) => {
+            const innerCard = el.querySelector('.card-title')
+            const elementText = innerCard.textContent;
+            const isContainsSearchRequest = searchRegExp.test(elementText)
+            if (!isContainsSearchRequest) {
+               el.classList.add('hide')
+            } else {
+               el.classList.remove('hide');
+            }
+            moreBtn.classList.add('hide');
+         })
+      }
    })
+}
+
+
+addMinMaxPriceSort();
+renderCatalog();
+//загрузка продуктов в каталог
+showProdutsOnloadPage()
+   //функционал поиска
+   .then(addSearchProducts);
