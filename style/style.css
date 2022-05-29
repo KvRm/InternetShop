@@ -113,6 +113,7 @@ header {
    height: 350px;
    border-radius: 10px;
    margin-bottom: 10px;
+   width: 335px;
 }
 .card:hover {
    box-shadow: 1px 1px 5px black;
